@@ -30,7 +30,7 @@ public class EintraegeController {
     private TextField endTimeField;
 
     private Stage dialogStage;
-    private Eintrag appointment;
+    private Eintrag eintrag;
     private boolean saveClicked = false;
 
     public void setDialogStage(Stage dialogStage) {
@@ -48,8 +48,8 @@ public class EintraegeController {
         endTimeField.setText(eintrag.getEndzeit().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm")));
     }
 
-    public Eintrag getAppointment() {
-        return appointment;
+    public Eintrag getEintrag() {
+        return eintrag;
     }
 
     public boolean isSaveClicked() {
@@ -60,22 +60,22 @@ public class EintraegeController {
     private void handleSave() {
         if (isInputValid()) {
             // Wenn der Termin neu ist oder bearbeitet wird, aktualisieren Sie ihn
-            if (appointment == null) {
+            if (this.eintrag == null) {
                 // Dies sollte nicht passieren, wenn setAppointment korrekt aufgerufen wird
                 // Aber zur Sicherheit initialisieren wir es hier.
-                appointment = new Eintrag("", "", null, null);
+                this.eintrag = new Eintrag("", "", null, null);
             }
 
-            appointment.setTitel(titleField.getText());
-            appointment.setBeschreibung(descriptionArea.getText());
+            this.eintrag.setTitel(titleField.getText());
+            this.eintrag.setBeschreibung(descriptionArea.getText());
 
             LocalDate startDate = startDatePicker.getValue();
             LocalTime startTime = LocalTime.parse(startTimeField.getText());
-            appointment.setStartzeit(LocalDateTime.of(startDate, startTime));
+            this.eintrag.setStartzeit(LocalDateTime.of(startDate, startTime));
 
             LocalDate endDate = endDatePicker.getValue();
             LocalTime endTime = LocalTime.parse(endTimeField.getText());
-            appointment.setEndzeit(LocalDateTime.of(endDate, endTime));
+            this.eintrag.setEndzeit(LocalDateTime.of(endDate, endTime));
 
             saveClicked = true;
             dialogStage.close();

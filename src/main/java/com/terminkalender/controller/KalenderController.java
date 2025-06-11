@@ -95,7 +95,9 @@ public class KalenderController {
 
             EintraegeController controller = loader.getController();
             // Optional: Setzen Sie ein Standarddatum für das neue Termin
-            controller.setEintrag(new Eintrag("", "", LocalDateTime.of(currentDisplayedDate, LocalTime.now()), LocalDateTime.of(currentDisplayedDate, LocalTime.now().plusHours(1))));
+            controller.setEintrag(new Eintrag("", "",
+                    LocalDateTime.of(currentDisplayedDate, LocalTime.now()),
+                    LocalDateTime.of(currentDisplayedDate, LocalTime.now().plusHours(1))));
 
             Stage stage = new Stage();
             stage.setTitle("Termin hinzufügen");
@@ -104,9 +106,9 @@ public class KalenderController {
             stage.showAndWait();
 
             // Nach dem Schließen des Formulars prüfen, ob ein Termin hinzugefügt wurde
-            Eintrag newAppointment = controller.getEintrag();
-            if (newAppointment != null && controller.isSaveClicked()) {
-                appointments.add(newAppointment);
+            Eintrag newEintrag = EintraegeController.getEintrag();
+            if (newEintrag != null && controller.isSaveClicked()) {
+                newEintrag.add(newEintrag);
                 filterAppointmentsByDate(currentDisplayedDate); // Liste aktualisieren
             }
 
@@ -120,7 +122,7 @@ public class KalenderController {
         Eintrag selectedAppointment = appointmentListView.getSelectionModel().getSelectedItem();
         if (selectedAppointment != null) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("../AppointmentForm.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("../eintraege-form.fxml"));
                 Parent root = loader.load();
 
                 KalenderController controller = loader.getController();
@@ -133,7 +135,7 @@ public class KalenderController {
                 stage.showAndWait();
 
                 // Nach dem Schließen des Formulars prüfen, ob der Termin gespeichert wurde
-                if (controller.isSaveClicked()) {
+                if (EintraegeController.saveClicked()) {
                     // Der Termin im Model wurde bereits direkt im Formularcontroller aktualisiert
                     // Wir müssen nur die ListView aktualisieren, um die Änderungen anzuzeigen
                     filterAppointmentsByDate(currentDisplayedDate);

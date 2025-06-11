@@ -3,6 +3,7 @@ package com.terminkalender;
 import com.terminkalender.model.Eintrag;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -13,22 +14,19 @@ import java.time.LocalTime;
 
 public class Main extends Application {
     @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 512, 512);
-        stage.setTitle("Termin-Kalender 1.0");
-        stage.setScene(scene);
-        stage.show();
+    public void start(Stage primaryStage) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("CalendarView.fxml"));
+        Parent root = loader.load();
 
-        //Eintrag eintrag = new Eintrag("ola", "sup", "13:30", "15:00", "03:07", "Berlin");
-        //System.out.println(eintrag);
-
-
-
+        Scene scene = new Scene(root);
+        primaryStage.setTitle("Terminplaner");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
-
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 }
+
+
