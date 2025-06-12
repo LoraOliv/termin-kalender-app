@@ -63,7 +63,7 @@ public class EintraegeController {
             if (this.eintrag == null) {
                 // Dies sollte nicht passieren, wenn setAppointment korrekt aufgerufen wird
                 // Aber zur Sicherheit initialisieren wir es hier.
-                this.eintrag = new Eintrag("", "", null, null);
+                this.eintrag = new Eintrag("Hello", "wichtig", null, null);
             }
 
             this.eintrag.setTitel(titleField.getText());

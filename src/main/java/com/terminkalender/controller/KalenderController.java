@@ -47,11 +47,15 @@ public class KalenderController {
         // Beispiel-Termine (in einer echten App würden diese aus einer Datenbank/Datei geladen)
         appointments.addAll(
                 new Eintrag("Meeting", "Besprechung mit Team A",
-                        LocalDateTime.of(currentDisplayedDate, LocalTime.of(10, 0)),
-                        LocalDateTime.of(currentDisplayedDate, LocalTime.of(11, 0))),
+                LocalDateTime.of(currentDisplayedDate, LocalTime.of(10, 0)),
+                LocalDateTime.of(currentDisplayedDate, LocalTime.of(11, 0)),
+                        LocalDateTime.of(currentDisplayedDate, LocalTime.of(11, 0)),
+                        "Büro"), // Beispiel-Ort
                 new Eintrag("Projektarbeit", "Feature X implementieren",
                         LocalDateTime.of(currentDisplayedDate, LocalTime.of(14, 0)),
-                        LocalDateTime.of(currentDisplayedDate, LocalTime.of(16, 0)))
+                        LocalDateTime.of(currentDisplayedDate, LocalTime.of(16, 0)),
+                        LocalDateTime.of(currentDisplayedDate, LocalTime.of(11, 0)),
+                        "Home Office") // Beispiel-Ort
         );
         filterAppointmentsByDate(currentDisplayedDate);
     }
@@ -68,7 +72,7 @@ public class KalenderController {
 
     private void filterAppointmentsByDate(LocalDate date) {
         List<Eintrag> filteredList = appointments.stream()
-                .filter(a -> a.getStartTime().toLocalDate().equals(date))
+                .filter(a -> a.getStartzeit().toLocalDate().equals(date))
                 .collect(Collectors.toList());
         appointmentListView.setItems(FXCollections.observableArrayList(filteredList));
     }
@@ -90,26 +94,32 @@ public class KalenderController {
     @FXML
     private void handleAddAppointment() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../AppointmentForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("src/main/resources/com.terminkalender/eintraege-form.fxml"));
             Parent root = loader.load();
 
             EintraegeController controller = loader.getController();
+            // Dem Formular-Controller den Stage übergeben, damit er ihn schließen kann
+            Stage formStage = new Stage(); // Eine neue Stage für das Formular
+            formStage.setTitle("Termin hinzufügen");
+            formStage.initModality(Modality.APPLICATION_MODAL);
+            formStage.setScene(new Scene(root));
+            controller.setDialogStage(formStage); // Wichtig: Setzen Sie die Dialog Stage im Formular-Controller
+
             // Optional: Setzen Sie ein Standarddatum für das neue Termin
             controller.setEintrag(new Eintrag("", "",
                     LocalDateTime.of(currentDisplayedDate, LocalTime.now()),
                     LocalDateTime.of(currentDisplayedDate, LocalTime.now().plusHours(1))));
 
-            Stage stage = new Stage();
-            stage.setTitle("Termin hinzufügen");
-            stage.initModality(Modality.APPLICATION_MODAL); // Blockiert das Hauptfenster
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
+
+            formStage.showAndWait(); // showAndWait auf der Formular-Stage
 
             // Nach dem Schließen des Formulars prüfen, ob ein Termin hinzugefügt wurde
-            Eintrag newEintrag = EintraegeController.getEintrag();
-            if (newEintrag != null && controller.isSaveClicked()) {
-                newEintrag.add(newEintrag);
-                filterAppointmentsByDate(currentDisplayedDate); // Liste aktualisieren
+            if (controller.isSaveClicked()) { // 'controller' ist der Instanz-Controller, den wir geladen haben
+                Eintrag newEintrag = controller.getEintrag(); // Richtig: getEintrag auf der Instanz des Controllers aufrufen
+                if (newEintrag != null) { // Überprüfen, ob wirklich ein Eintrag zurückgegeben wurde
+                    appointments.add(newEintrag); // Richtig: Fügen Sie den Eintrag der ObservableList hinzu
+                    filterAppointmentsByDate(currentDisplayedDate); // Liste aktualisieren
+                }
             }
 
         } catch (IOException e) {
@@ -122,20 +132,23 @@ public class KalenderController {
         Eintrag selectedAppointment = appointmentListView.getSelectionModel().getSelectedItem();
         if (selectedAppointment != null) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("../eintraege-form.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("src/main/resources/com.terminkalender/eintraege-form.fxml"));
                 Parent root = loader.load();
 
-                KalenderController controller = loader.getController();
-                controller.setEintrag(selectedAppointment); // Termin zum Bearbeiten übergeben
+                EintraegeController controller = loader.getController(); // Richtig: Controller des Formulars laden
+                // Dem Formular-Controller den Stage übergeben
+                Stage formStage = new Stage(); // Eine neue Stage für das Formular
+                formStage.setTitle("Termin bearbeiten");
+                formStage.initModality(Modality.APPLICATION_MODAL);
+                formStage.setScene(new Scene(root));
+                controller.setDialogStage(formStage); // Wichtig: Setzen Sie die Dialog Stage im Formular-Controller
 
-                Stage stage = new Stage();
-                stage.setTitle("Termin bearbeiten");
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.setScene(new Scene(root));
-                stage.showAndWait();
+                controller.setEintrag(selectedAppointment); // Richtig: Termin zum Bearbeiten übergeben
+
+                formStage.showAndWait(); // showAndWait auf der Formular-Stage
 
                 // Nach dem Schließen des Formulars prüfen, ob der Termin gespeichert wurde
-                if (EintraegeController.saveClicked()) {
+                if (controller.isSaveClicked()) { // Richtig: Instanzmethode des Formular-Controllers aufrufen
                     // Der Termin im Model wurde bereits direkt im Formularcontroller aktualisiert
                     // Wir müssen nur die ListView aktualisieren, um die Änderungen anzuzeigen
                     filterAppointmentsByDate(currentDisplayedDate);
@@ -145,7 +158,6 @@ public class KalenderController {
                 e.printStackTrace();
             }
         } else {
-            // Fehlermeldung anzeigen, wenn kein Termin ausgewählt ist
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Kein Termin ausgewählt");
             alert.setHeaderText(null);

@@ -1,27 +1,34 @@
 package com.terminkalender.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-
-import static jdk.javadoc.internal.doclets.formats.html.markup.HtmlStyle.title;
 
 public class Eintrag {
 
     private String titel;
     private String beschreibung;
-    private LocalTime startzeit;
-    private LocalTime endzeit;
-    private LocalDate datum;
+    private LocalDateTime startzeit;
+    private LocalDateTime endzeit;
+    private LocalDateTime datum;
     private String ort;
 
     // Konstruktor
-    public Eintrag(String titel, String beschreibung, LocalTime startzeit, LocalTime endzeit, LocalDate datum, String ort) {
+    public Eintrag(String titel, String beschreibung, LocalDateTime startzeit, LocalDateTime endzeit, LocalDateTime datum, String ort) {
         this.titel = titel;
         this.beschreibung = beschreibung;
         this.startzeit = startzeit;
         this.endzeit = endzeit;
         this.datum = datum;
         this.ort = ort;
+    }
+
+    public Eintrag(String titel, String beschreibung, LocalDateTime startzeit, LocalDateTime endzeit) {
+        this.titel = titel;
+        this.beschreibung = beschreibung;
+        this.startzeit = null;
+        this.endzeit = null;
+
     }
 
 
@@ -41,27 +48,27 @@ public class Eintrag {
         this.beschreibung = beschreibung;
     }
 
-    public LocalTime getStartzeit() {
+    public LocalDateTime getStartzeit() {
         return startzeit;
     }
 
-    public void setStartzeit(LocalTime startzeit) {
+    public void setStartzeit(LocalDateTime startzeit) {
         this.startzeit = startzeit;
     }
 
-    public LocalTime getEndzeit() {
+    public LocalDateTime getEndzeit() {
         return endzeit;
     }
 
-    public void setEndzeit(LocalTime endzeit) {
+    public void setEndzeit(LocalDateTime endzeit) {
         this.endzeit = endzeit;
     }
 
-    public LocalDate getDatum() {
+    public LocalDateTime getDatum() {
         return datum;
     }
 
-    public void setDatum(LocalDate datum) {
+    public void setDatum(LocalDateTime datum) {
         this.datum = datum;
     }
 
@@ -76,7 +83,7 @@ public class Eintrag {
 
     @Override
     public String toString() {
-        return title +
+        return titel +
                 beschreibung +
                 "Start: " + startzeit.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm"))
                 + " Ende: " + endzeit.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm")) +
