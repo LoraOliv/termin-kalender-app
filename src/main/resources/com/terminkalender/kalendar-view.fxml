@@ -24,7 +24,7 @@
   </HBox>
 </top>
 <center>
-  <ListView fx:id="appointmentListView" VBox.vgrow="ALWAYS"/>
+  <ListView fx:id="appointmentListView" />
 </center>
 <bottom>
   <HBox alignment="CENTER_RIGHT" spacing="10">

@@ -94,7 +94,7 @@ public class KalenderController {
     @FXML
     private void handleAddAppointment() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("src/main/resources/com.terminkalender/eintraege-form.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("eintraege-form.fxml"));
             Parent root = loader.load();
 
             EintraegeController controller = loader.getController();
@@ -132,7 +132,7 @@ public class KalenderController {
         Eintrag selectedAppointment = appointmentListView.getSelectionModel().getSelectedItem();
         if (selectedAppointment != null) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("src/main/resources/com.terminkalender/eintraege-form.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("eintraege-form.fxml"));
                 Parent root = loader.load();
 
                 EintraegeController controller = loader.getController(); // Richtig: Controller des Formulars laden
