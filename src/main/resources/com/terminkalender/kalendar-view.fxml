@@ -5,7 +5,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.HBox?>
-<?import javax.swing.text.html.ListView?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.BorderPane?>
 
 
@@ -17,17 +17,17 @@
     <padding>
       <Insets top="10" right="10" bottom="10" left="10"/>
     </padding>
-    <Button text="Vorheriger Tag" onAction="#handlePreviousDay"/>
+    <Button text="Vorheriger Tag" onAction="#gehtZuVorherigerTag"/>
     <Label fx:id="dateLabel" text="[Datum]" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-    <Button text="Nächster Tag" onAction="#handleNextDay"/>
-    <Button text="Termin hinzufügen" onAction="#handleAddAppointment"/>
+    <Button text="Nächster Tag" onAction="#gehtZuNaechsterTag"/>
+    <Button text="Termin hinzufügen" onAction="#TerminHinzufuegen"/>
   </HBox>
 </top>
 <center>
   <ListView fx:id="appointmentListView" />
 </center>
 <bottom>
-  <HBox alignment="CENTER_RIGHT" spacing="10">
+  <HBox alignment="CENTER" spacing="10">
     <padding>
       <Insets top="10" right="10" bottom="10" left="10"/>
     </padding>

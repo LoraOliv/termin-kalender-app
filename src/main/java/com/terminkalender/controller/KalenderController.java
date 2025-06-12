@@ -78,21 +78,35 @@ public class KalenderController {
     }
 
     @FXML
-    private void handlePreviousDay() {
+    private void gehtZuVorherigerTag() { //Geht zu der vorheriger Tag / Go to the previous day.
         currentDisplayedDate = currentDisplayedDate.minusDays(1);
         updateDateLabel();
         loadAppointmentsForDate(currentDisplayedDate);
     }
 
     @FXML
-    private void handleNextDay() {
+    private void gehtZuVorherigeWoche() { //Geht zu die vorherige Woche / Go to the previous week.
+        currentDisplayedDate = currentDisplayedDate.minusDays(7);
+        updateDateLabel();
+        loadAppointmentsForDate(currentDisplayedDate);
+    }
+
+    @FXML
+    private void gehtZuNaechsterTag() { //Geht zu der nächster Tag / Go to the next day.
         currentDisplayedDate = currentDisplayedDate.plusDays(1);
         updateDateLabel();
         loadAppointmentsForDate(currentDisplayedDate);
     }
 
     @FXML
-    private void handleAddAppointment() {
+    private void gehtZuNaechsterWoche() { //Geht zu die nächste Woche / Go to the next week.
+        currentDisplayedDate = currentDisplayedDate.minusDays(7);
+        updateDateLabel();
+        loadAppointmentsForDate(currentDisplayedDate);
+    }
+
+    @FXML
+    private void TerminHinzufuegen() { // ein neuer Termin hinzufügen / Add an new appointment.
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("eintraege-form.fxml"));
             Parent root = loader.load();
@@ -103,8 +117,7 @@ public class KalenderController {
             formStage.setTitle("Termin hinzufügen");
             formStage.initModality(Modality.APPLICATION_MODAL);
             formStage.setScene(new Scene(root));
-            controller.setDialogStage(formStage); // Wichtig: Setzen Sie die Dialog Stage im Formular-Controller
-
+            controller.setDialogStage(formStage);
             // Optional: Setzen Sie ein Standarddatum für das neue Termin
             controller.setEintrag(new Eintrag("", "",
                     LocalDateTime.of(currentDisplayedDate, LocalTime.now()),
